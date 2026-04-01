@@ -3,163 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSNEYDEV | Automation Specialist</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <title>OSNEYDEV | Automation & Infrastructure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00d4ff;
             --dark-bg: #050505;
-            --terminal-black: #0a0a0a;
-            --glass-white: rgba(255, 255, 255, 0.1);
+            --panel-bg: #0a0a0a;
+            --border-color: #222;
+            --text-main: #e0e0e0;
+            --text-dim: #888;
+            --danger: #ff3e3e;
         }
 
         body {
             background-color: var(--dark-bg);
-            color: #ccc;
+            color: var(--text-main);
             font-family: 'Fira Code', monospace;
             margin: 0; padding: 20px;
             display: flex; justify-content: center;
         }
 
-        .container {
-            max-width: 900px; width: 100%;
-            border: 1px solid #222; background: var(--terminal-black);
-            padding: 40px; position: relative;
+        /* Scanline CRT Effect */
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%; pointer-events: none; z-index: 1000;
         }
 
+        .container {
+            max-width: 1000px; width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 40px; box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+
+        /* HEADER */
         .header {
             border-bottom: 2px solid var(--neon-blue);
-            margin-bottom: 40px; padding-bottom: 10px;
+            padding-bottom: 20px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: flex-end;
         }
 
-        .dev-title {
-            font-size: 2em; color: var(--neon-blue); font-weight: bold;
-        }
+        .header h1 { margin: 0; font-size: 2.5em; letter-spacing: -1px; color: var(--neon-blue); }
+        .status-light { font-size: 0.8em; color: var(--neon-blue); animation: blink 1.5s infinite; }
 
-        .grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* GRID SISTEMAS */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         .card {
-            border: 1px solid #333; padding: 20px;
-            cursor: pointer; transition: all 0.3s;
-            background: linear-gradient(145deg, #0f0f0f, #050505);
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.01);
+            padding: 25px; cursor: pointer; transition: 0.3s;
         }
 
         .card:hover {
             border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+            background: rgba(0, 212, 255, 0.03);
+            transform: translateY(-2px);
         }
 
-        .card h2 { font-size: 0.9em; color: var(--neon-blue); text-transform: uppercase; margin-top: 0; }
+        .card h2 { margin: 0 0 10px 0; font-size: 0.9em; color: var(--neon-blue); text-transform: uppercase; }
+        .card p { font-size: 0.8em; color: var(--text-dim); margin: 0; }
 
-        /* MODAL PROTEGIDO */
+        /* SECCIÓN DE JUEGOS */
+        .games-section {
+            margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 30px;
+        }
+
+        .game-tag {
+            display: inline-block; padding: 4px 10px; font-size: 0.7em;
+            background: var(--border-color); color: var(--neon-blue);
+            margin-right: 10px; margin-bottom: 10px; border-radius: 3px;
+        }
+
+        /* MODAL / INFO PANEL */
         #info-panel {
             display: none; position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 85%; max-width: 600px;
-            background: #0f0f0f; border: 1px solid var(--neon-blue);
-            padding: 40px; z-index: 1000;
+            width: 90%; max-width: 650px;
+            background: #0d0d0d; border: 1px solid var(--neon-blue);
+            padding: 40px; z-index: 2000; box-shadow: 0 0 100px rgba(0,0,0,0.9);
         }
 
         .overlay {
             display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1500;
         }
 
-        .close-btn { color: #555; cursor: pointer; float: right; font-size: 0.8em; }
-        .close-btn:hover { color: var(--neon-blue); }
+        .close-btn { color: var(--danger); cursor: pointer; float: right; font-weight: bold; }
 
-        .encrypted-text {
-            font-size: 0.9em; line-height: 1.6; color: #aaa;
-        }
+        .tech-list { margin-top: 20px; font-size: 0.8em; color: var(--neon-blue); list-style: none; padding: 0; }
+        .tech-list li::before { content: "> "; }
 
-        .feature-list {
-            margin-top: 20px; border-top: 1px solid #222; padding-top: 15px;
-            font-size: 0.8em; color: var(--neon-blue);
+        footer {
+            margin-top: 50px; border-top: 1px solid var(--border-color);
+            padding-top: 20px; text-align: center; font-size: 0.7em; color: #444;
         }
     </style>
 </head>
 <body>
 
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay" onclick="closeInfo()"></div>
 
 <div class="container">
-    <div class="header">
-        <div class="dev-title">OSNEYDEV // OPERATIONS</div>
-        <p style="font-size: 0.8em; color: #555;">Sistemas de Automatización y Monitoreo Privado</p>
-    </div>
+    <header class="header">
+        <div>
+            <h1>OSNEYDEV_</h1>
+            <p style="margin: 5px 0 0; font-size: 0.8em; color: var(--text-dim);">SYSTEM ARCHITECT & AUTOMATION SPECIALIST</p>
+        </div>
+        <div class="status-light">● SYSTEM_ACTIVE</div>
+    </header>
 
     <div class="grid">
-        <div class="card" onclick="showInfo('dofus')">
+        <div class="card" onclick="showInfo('recoleccion')">
             <h2>Gestión de Recursos</h2>
-            <p style="font-size: 0.8em;">Optimización de procesos en entornos virtuales complejos.</p>
+            <p>Automatización de ciclos de recolección y logística de inventario en entornos competitivos.</p>
         </div>
         <div class="card" onclick="showInfo('monitor')">
-            <h2>Control de Infraestructura</h2>
-            <p style="font-size: 0.8em;">Red remota de monitoreo y alertas proactivas.</p>
+            <h2>Infraestructura Remota</h2>
+            <p>Monitoreo centralizado de estaciones de trabajo con alertas vía protocolos externos.</p>
         </div>
         <div class="card" onclick="showInfo('ghost')">
-            <h2>Análisis Silencioso</h2>
-            <p style="font-size: 0.8em;">Captura de datos de alta fidelidad sin impacto en sistema.</p>
+            <h2>Transmisión Fantasma</h2>
+            <p>Captura y envío de telemetría visual sin impacto en el rendimiento de la interfaz.</p>
         </div>
         <div class="card" onclick="showInfo('isolation')">
-            <h2>Aislamiento Lógico</h2>
-            <p style="font-size: 0.8em;">Ejecución de múltiples entornos en sandbox protegido.</p>
+            <h2>Aislamiento de Entorno</h2>
+            <p>Ejecución paralela de múltiples instancias mediante técnicas de segmentación lógica.</p>
         </div>
     </div>
 
-    <footer style="margin-top: 60px; text-align: center; font-size: 0.7em; color: #333;">
-        OSNEYDEV SECURITY // ACCESO RESTRINGIDO
+    <section class="games-section">
+        <h2 style="font-size: 1.1em; color: var(--text-main); margin-bottom: 20px;">ECOSISTEMAS DE OPERACIÓN</h2>
+        
+        <div>
+            <span class="game-tag">DOFUS RETRO</span>
+            <span class="game-tag">DOFUS 3 (UNITY)</span>
+            <span class="game-tag">WINDOWS WIN32 ENV</span>
+            <span class="game-tag">TELEGRAM API</span>
+        </div>
+
+        <p style="font-size: 0.85em; color: var(--text-dim); line-height: 1.6; margin-top: 20px;">
+            Especialista en la creación de herramientas de soporte para el ecosistema de **Dofus**. 
+            Desde la arquitectura clásica de la versión **Retro** hasta la transición tecnológica a **Unity (Dofus 3)**, 
+            mis sistemas se adaptan a cambios de motor gráfico manteniendo la integridad y seguridad de la cuenta.
+        </p>
+    </section>
+
+    <footer>
+        OSNEYDEV SECURITY OPS // CABIMAS, VENEZUELA // 2026
     </footer>
 </div>
 
 <div id="info-panel">
     <span class="close-btn" onclick="closeInfo()">[ CERRAR ]</span>
-    <h3 id="info-title" style="color: var(--neon-blue); margin-top:0;"></h3>
-    <p id="info-content" class="encrypted-text"></p>
-    <div id="info-features" class="feature-list"></div>
+    <h3 id="modal-title" style="color: var(--neon-blue); margin-top: 0; text-transform: uppercase;"></h3>
+    <p id="modal-content" style="font-size: 0.9em; line-height: 1.6; color: #aaa;"></p>
+    <ul id="modal-tech" class="tech-list"></ul>
 </div>
 
 <script>
-    const data = {
-        'dofus': {
-            title: 'OPTIMIZACIÓN DE RECURSOS DIGITALES',
-            content: 'Desarrollo soluciones para la automatización de tareas repetitivas en plataformas de alta demanda. Mi sistema analiza el entorno visual para tomar decisiones lógicas en tiempo real, maximizando la eficiencia operativa y reduciendo el error humano en zonas de recolección masiva.',
-            features: '✓ Toma de decisiones autónoma | ✓ Análisis de entorno | ✓ Flujo de trabajo 24/7'
+    const db = {
+        'recoleccion': {
+            title: 'Optimización de Farmeo y Recolección',
+            content: 'Desarrollo de algoritmos de navegación para zonas de alta densidad en Dofus Retro y Dofus 3. El sistema gestiona automáticamente el reconocimiento de recursos, combate defensivo y retorno a puntos de almacenamiento, garantizando un flujo operativo de 24 horas.',
+            tech: ['Pathfinding de mapas optimizado', 'Detección de protectores de recursos', 'Gestión inteligente de inventario (Pods)']
         },
         'monitor': {
-            title: 'RED DE MONITOREO CENTRALIZADO',
-            content: 'Implementación de una red de nodos remotos que informan sobre el estado de salud de múltiples estaciones de trabajo. El sistema centraliza las notificaciones mediante protocolos de mensajería cifrada, permitiendo una gestión total desde cualquier ubicación.',
-            features: '✓ Alertas instantáneas | ✓ Reportes de estado | ✓ Gestión remota segura'
+            title: 'Red de Monitoreo de Computadores',
+            content: 'Arquitectura de supervisión remota que permite controlar el estado de múltiples máquinas de forma simultánea. Centraliza logs de error y estados de ejecución, enviando notificaciones instantáneas para minimizar el tiempo de inactividad.',
+            tech: ['Integración con mensajería cifrada', 'Reportes de hardware en tiempo real', 'Protocolos de recuperación automática']
         },
         'ghost': {
-            title: 'EXTRACCIÓN DE DATOS NO INTRUSIVA',
-            content: 'Especialista en técnicas de captura de información visual que operan de forma independiente al flujo principal del sistema. Esta tecnología permite supervisar procesos críticos sin generar latencia ni dejar huellas en la interfaz de usuario.',
-            features: '✓ Monitoreo invisible | ✓ Cero impacto en CPU | ✓ Captura de alta frecuencia'
+            title: 'Modo Fantasma: Telemetría Visual',
+            content: 'Tecnología de captura de imagen y video de baja latencia que opera en segundo plano. Permite la supervisión constante de lo que ocurre en pantalla sin interferir con la interacción del sistema operativo, ideal para monitoreo de seguridad y auditoría.',
+            tech: ['Captura no intrusiva', 'Compresión de video para transmisión', 'Cero rastro en interfaz de usuario']
         },
         'isolation': {
-            title: 'ENTORNOS DE EJECUCIÓN AISLADOS',
-            content: 'Diseño arquitecturas que permiten la coexistencia de múltiples aplicaciones en una misma máquina sin interferencias. Mediante técnicas de sandboxing, garantizo que cada instancia mantenga su propia identidad lógica y configuraciones aisladas.',
-            features: '✓ Aislamiento de perfiles | ✓ Gestión de instancias | ✓ Seguridad de procesos'
+            title: 'Aislamiento y Multi-instancia',
+            content: 'Configuración de entornos protegidos para la ejecución de múltiples aplicaciones de forma independiente en un solo equipo. Mediante el manejo de identidades aisladas, el sistema previene cruces de información y optimiza el uso de CPU/RAM.',
+            tech: ['Gestión de instancias independientes', 'Aislamiento de registros de sistema', 'Optimización de recursos compartidos']
         }
     };
-<section style="margin-top: 40px; background: rgba(0, 212, 255, 0.02); border: 1px solid #222; padding: 25px;">
-    <h2 style="color: var(--neon-blue); font-size: 1.1em; letter-spacing: 2px;">ESCALABILIDAD Y MULTI-INSTANCIA</h2>
-    <p style="font-size: 0.85em; color: #aaa; line-height: 1.6;">
-        A diferencia de las automatizaciones convencionales que bloquean el uso del equipo, mis sistemas están diseñados para la 
-        <strong>paralelización de tareas</strong>.
-    </p>
-    <ul style="font-size: 0.8em; color: var(--neon-blue); list-style: none; padding: 0;">
-        <li style="margin-bottom: 10px;">⚡ <strong>Background Execution:</strong> Procesamiento de lógica sin necesidad de mantener la ventana en primer plano.</li>
-        <li style="margin-bottom: 10px;">🖥️ <strong>Resource Management:</strong> Optimización de ciclos de CPU para mantener la estabilidad en ejecuciones masivas (+10 instancias).</li>
-        <li style="margin-bottom: 10px;">🔒 <strong>Logic Independence:</strong> Cada unidad operativa funciona con su propia pila de memoria y flujo de decisiones.</li>
-    </ul>
-</section>
-    function showInfo(key) {
-        document.getElementById('info-title').innerText = data[key].title;
-        document.getElementById('info-content').innerText = data[key].content;
-        document.getElementById('info-features').innerText = data[key].features;
+
+    function showInfo(id) {
+        const item = db[id];
+        document.getElementById('modal-title').innerText = item.title;
+        document.getElementById('modal-content').innerText = item.content;
+        
+        const list = document.getElementById('modal-tech');
+        list.innerHTML = '';
+        item.tech.forEach(t => {
+            const li = document.createElement('li');
+            li.innerText = t;
+            list.appendChild(li);
+        });
+
         document.getElementById('info-panel').style.display = 'block';
         document.getElementById('overlay').style.display = 'block';
     }
