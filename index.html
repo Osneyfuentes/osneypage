@@ -3,192 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev Terminal | Automation Specialist</title>
+    <title>OSNEYDEV | Automation Architect</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-green: #00ff41;
-            --dark-bg: #0d0208;
-            --terminal-gray: #1a1a1a;
+            --neon-blue: #00d4ff;
+            --ghost-white: #e0e0e0;
+            --dark-bg: #050505;
+            --terminal-black: #0a0a0a;
+            --danger-red: #ff3e3e;
         }
 
         body {
             background-color: var(--dark-bg);
-            color: var(--neon-green);
+            color: var(--ghost-white);
             font-family: 'Fira Code', monospace;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
-            overflow-x: hidden;
+            line-height: 1.4;
         }
 
-        /* Efecto de línea de escaneo CRT */
-        body::before {
-            content: " ";
-            display: block;
+        /* Efecto CRT Scanline */
+        body::after {
+            content: "";
             position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
             pointer-events: none;
+            z-index: 10;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
-            border: 1px solid var(--neon-green);
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            background: var(--terminal-black);
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.05);
+            position: relative;
         }
 
-        header {
-            border-bottom: 1px solid var(--neon-green);
-            padding-bottom: 20px;
+        .header-id {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--neon-blue);
+            padding-bottom: 10px;
             margin-bottom: 30px;
         }
 
-        .glitch {
-            font-size: 2.5em;
+        .dev-name {
+            font-size: 2.2em;
             font-weight: bold;
+            color: var(--neon-blue);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            border: 1px solid #333;
-            padding: 15px;
-            background: var(--terminal-gray);
-        }
-
-        .stat-card h3 {
-            margin: 0;
-            font-size: 0.8em;
-            color: #888;
-            text-transform: uppercase;
-        }
-
-        .stat-card p {
-            margin: 10px 0 0;
-            font-size: 1.2em;
-        }
-
-        .project-list {
-            margin-top: 30px;
-        }
-
-        .project-item {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-left: 3px solid var(--neon-green);
-            background: rgba(0, 255, 65, 0.05);
-        }
-
-        .typing-text::after {
-            content: "|";
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .code-snippet {
-            background: #000;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            color: #d1d1d1;
-            overflow-x: auto;
-            border: 1px solid #222;
-        }
-
-        .tag {
-            display: inline-block;
-            background: var(--neon-green);
+        .status-tag {
+            background: var(--neon-blue);
             color: black;
-            padding: 2px 8px;
-            font-size: 0.7em;
+            padding: 5px 15px;
             font-weight: bold;
-            margin-right: 5px;
-            border-radius: 3px;
+            height: fit-content;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: 1px solid #222;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, 0.03);
+        }
+
+        .card h2 {
+            margin: 0 0 15px 0;
+            font-size: 1em;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+        }
+
+        .project-desc {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .skill-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-list li {
+            border: 1px solid #444;
+            padding: 4px 10px;
+            font-size: 0.8em;
+        }
+
+        .console-box {
+            background: #000;
+            border-left: 4px solid var(--danger-red);
+            padding: 20px;
+            font-size: 0.85em;
+            color: #00ff00;
+            margin-top: 20px;
+        }
+
+        .ghost-mode {
+            color: var(--danger-red);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75em;
+            color: #444;
+            border-top: 1px solid #222;
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <div class="glitch">SISTEMA ACTIVO</div>
-        <p class="typing-text">Usuario: Python Automation Specialist // Ubicación: Cabimas, VZLA</p>
-    </header>
+    <div class="header-id">
+        <div class="dev-name">OSNEYDEV_SYSTEMS</div>
+        <div class="status-tag">ONLINE_</div>
+    </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>Lenguaje Core</h3>
-            <p>Python 3.x</p>
+    <div class="grid">
+        <div class="card">
+            <h2>Dofus Automation Suite</h2>
+            <p class="project-desc">Scripts avanzados para optimización de farmeo y limpieza de zonas de recolección en tiempo real.</p>
+            <ul class="skill-list">
+                <li>Vision-AI</li>
+                <li>OpenCV</li>
+                <li>Pixel-Mapping</li>
+            </ul>
         </div>
-        <div class="stat-card">
-            <h3>Especialidad</h3>
-            <p>Computer Vision & Bots</p>
+
+        <div class="card">
+            <h2>PC Monitoring Network</h2>
+            <p class="project-desc">Gestión centralizada de múltiples estaciones de trabajo con reportes vía Telegram API.</p>
+            <ul class="skill-list">
+                <li>Multi-Threading</li>
+                <li>Remote-Control</li>
+                <li>API-Rest</li>
+            </ul>
         </div>
-        <div class="stat-card">
-            <h3>Frameworks</h3>
-            <p>OpenCV, PyAutoGUI</p>
+
+        <div class="card">
+            <h2>Stealth Image Engine</h2>
+            <p class="project-desc">Captura y envío de imágenes/video en <span class="ghost-mode">MODO FANTASMA</span> para monitoreo invisible.</p>
+            <ul class="skill-list">
+                <li>Python-MSS</li>
+                <li>Stealth-Ops</li>
+                <li>Win32API</li>
+            </ul>
         </div>
-        <div class="stat-card">
-            <h3>Entorno</h3>
-            <p>Windows Win32API</p>
+
+        <div class="card">
+            <h2>Identity Isolation</h2>
+            <p class="project-desc">Aislamiento de aplicaciones y sandboxing para ejecución segura de múltiples instancias.</p>
+            <ul class="skill-list">
+                <li>Instance-Ctrl</li>
+                <li>Logic-Core</li>
+            </ul>
         </div>
     </div>
 
-    <section class="project-list">
-        <h2>REPOSITORIOS DE OPERACIONES</h2>
-        
-        <div class="project-item">
-            <span class="tag">GAMING</span>
-            <strong>Dofus/Tibia Automation Suite</strong>
-            <p>Detección de píxeles en tiempo real, recolección de recursos y gestión de combate multicuenta.</p>
-        </div>
-
-        <div class="project-item">
-            <span class="tag">SYSTEMS</span>
-            <strong>Identity Isolation Sandbox</strong>
-            <p>Gestión de instancias únicas mediante AnyDesk y control de procesos aislados.</p>
-        </div>
-
-        <div class="project-item">
-            <span class="tag">MONITORING</span>
-            <strong>Telegram Monitoring Network</strong>
-            <p>Red de bots para control remoto de procesos y reportes de estado automáticos.</p>
-        </div>
-    </section>
-
-    <h2>FRAGMENTO DE LÓGICA</h2>
-    <div class="code-snippet">
+    <h2>TERMINAL_LOGS</h2>
+    <div class="console-box">
 <pre>
-def detect_turn_pixel(pos_x, pos_y):
-    # Detección de turno por valor de color exacto
-    pixel_color = pyautogui.pixel(pos_x, pos_y)
-    if pixel_color == (255, 102, 0):
-        print(">> TURNO DETECTADO: Iniciando secuencia de ataque...")
-        execute_combat_protocol()
+[SYSTEM] Iniciando OsneyDev.os...
+[PROCESS] Analizando mapa de recursos en Dofus... OK
+[GHOST] Capturando frame invisible en PC-03... OK
+[GHOST] Enviando video comprimido vía Telegram... OK
+[INFO] Servidores activos en Cabimas, Zulia.
+>> Esperando siguiente instrucción del desarrollador..._
 </pre>
     </div>
 
-    <footer style="margin-top: 50px; font-size: 0.7em; color: #444; text-align: center;">
-        [ TERMINAL v2.0.26 - ENCRYPTED CONNECTION ]
+    <footer>
+        DESIGNED BY OSNEYDEV © 2026 | BUILT WITH PYTHON & PASSION
     </footer>
 </div>
 
